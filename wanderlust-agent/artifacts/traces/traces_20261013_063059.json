@@ -1,0 +1,1096 @@
+{
+  "eval_cases": [
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "Can you recommend a budget-friendly relaxation and beach destination in Asia?"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "The top recommendation for a budget-friendly relaxation and beach escape in Asia is **Bali, Indonesia**!\n\n---\n\n### 🌴 Why Bali?\nBali offers the ultimate balance of pristine beaches, lush tropical nature, holistic wellness retreats, and vibrant coastal culture—all while remaining remarkably easy on your wallet.\n\n* **Budget Tier:** **$** (Budget-friendly)\n* **Average Daily Living Cost:** ~$60 USD / day (covering meals, transport, and leisure)\n* **Best Time to Visit:** **April to October** (Dry season — sunny days and lower humidity)\n* **Vibe:** Relaxation, beaches, wellness, nature, and coastal sunsets\n\n---\n\n### 🌊 Top Relaxation & Beach Highlights\n* **Sunsets & Clifftop Views:** Watch iconic golden hours over the Indian Ocean from **Uluwatu Temple** (accompanied by the traditional Kecak Fire Dance).\n* **Beach Days & Surfing:** Lounge on the sands or catch mellow waves in **Canggu** and **Seminyak**, or take a boat trip out to the turquoise waters of **Nusa Penida**.\n* **Tranquility in Ubud:** When you want a break from the coast, unwind amidst emerald greenery at the **Tegallalang Rice Terraces** or book an open-air jungle spa.\n\n---\n\n### 🏨 Where to Stay (Options for Every Budget)\n* **Budget ($35/night):** *Puri Garden Hotel & Hostel* – Relaxed social atmosphere with a pool, yoga classes, and lush gardens.\n* **Midscale ($95/night):** *Ubud Village Hotel* – Boutique comfort with serene jungle pools and traditional Balinese architecture.\n* **Luxury ($800/night):** *Four Seasons Resort Bali at Sayan* – World-class riverfront sanctuary immersed in nature.\n\n---\n\n### 🍲 Must-Try Local Eats\n* **Nasi Campur:** Fragrant rice served with a colorful assortment of spiced meats, vegetables, and sambal.\n* **Babi Guling:** Traditional Balinese spit-roasted suckling pig.\n* **Fresh Açaí Bowls & Smoothies:** Plentiful in Canggu and Seminyak beachside cafes.\n\n---\n\nWould you like me to put together a **custom multi-day itinerary**, calculate a **full estimated budget** for your trip duration, or provide **packing and weather tips**?"
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "eval_case_id": "destination_search_budget",
+      "agent_data": {
+        "agents": {
+          "wanderlust_agent": {
+            "agent_id": "wanderlust_agent",
+            "agent_type": "LlmAgent",
+            "description": "",
+            "instruction": "You are Wanderlust Concierge, an expert travel designer and trip planning AI assistant.\nYour mission is to help travelers discover extraordinary destinations, design curated day-by-day itineraries, estimate transparent trip budgets, and prepare for seamless journeys.\n\nGuidelines:\n1. When asked for recommendations, always use `search_destinations` or `get_destination_details` to retrieve accurate catalog details.\n2. When asked about costs, use `calculate_trip_budget` to compute accurate lodging, daily living, and airfare costs.\n3. When asked for packing or climate advice, use `get_weather_and_packing_tips`.\n4. Be engaging, inspiring, and concise. Provide actionable advice tailored to the user's travel style (adventure, cultural, luxury, budget, relaxation).\n5. If the user expresses specific travel preferences (e.g., budget limits, preferred continents, favorite activities), remember them and tailor subsequent recommendations accordingly.\n",
+            "tools": [
+              {
+                "function_declarations": [
+                  {
+                    "description": "Search and filter the curated catalog of travel destinations.\n\nArgs:\n    query: Optional search keyword (e.g. 'temple', 'hiking', 'beach', 'tokyo', 'europe').\n    continent: Optional continent filter ('Asia', 'Europe', 'Americas').\n    budget_tier: Optional budget tier filter ('$' for budget, '$$' for moderate, '$$$' for premium).\n    travel_style: Optional vibe or style ('adventure', 'relaxation', 'culinary', 'cultural', 'nature').\n\nReturns:\n    A list of matching destination summaries.",
+                    "name": "search_destinations",
+                    "parameters_json_schema": {
+                      "properties": {
+                        "query": {
+                          "default": "",
+                          "title": "Query",
+                          "type": "string"
+                        },
+                        "continent": {
+                          "default": "",
+                          "title": "Continent",
+                          "type": "string"
+                        },
+                        "budget_tier": {
+                          "default": "",
+                          "title": "Budget Tier",
+                          "type": "string"
+                        },
+                        "travel_style": {
+                          "default": "",
+                          "title": "Travel Style",
+                          "type": "string"
+                        }
+                      },
+                      "title": "search_destinationsParams",
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "items": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Retrieve comprehensive details, attractions, hotels, and food for a specific destination.\n\nArgs:\n    destination_id: Identifier of the destination (e.g. 'tokyo', 'paris', 'bali', 'costa_rica', 'rome', 'banff').\n\nReturns:\n    Full destination details dictionary or error note.",
+                    "name": "get_destination_details",
+                    "parameters_json_schema": {
+                      "properties": {
+                        "destination_id": {
+                          "title": "Destination Id",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "destination_id"
+                      ],
+                      "title": "get_destination_detailsParams",
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Calculate an estimated trip budget breakdown for a destination.\n\nArgs:\n    destination_id: Target destination id (e.g. 'tokyo', 'paris', 'bali', 'costa_rica', 'rome', 'banff').\n    days: Duration of the trip in days (default: 5).\n    num_travelers: Number of people traveling (default: 1).\n    accommodation_tier: Tier of lodging ('budget', 'midscale', 'luxury').\n    include_flights: Whether to calculate estimated round-trip airfare.\n\nReturns:\n    A detailed cost breakdown including lodging, daily expenses, flights, and total budget.",
+                    "name": "calculate_trip_budget",
+                    "parameters_json_schema": {
+                      "properties": {
+                        "destination_id": {
+                          "title": "Destination Id",
+                          "type": "string"
+                        },
+                        "days": {
+                          "default": 5,
+                          "title": "Days",
+                          "type": "integer"
+                        },
+                        "num_travelers": {
+                          "default": 1,
+                          "title": "Num Travelers",
+                          "type": "integer"
+                        },
+                        "accommodation_tier": {
+                          "default": "midscale",
+                          "title": "Accommodation Tier",
+                          "type": "string"
+                        },
+                        "include_flights": {
+                          "default": true,
+                          "title": "Include Flights",
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "destination_id"
+                      ],
+                      "title": "calculate_trip_budgetParams",
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Get climate information, seasonal weather, and packing checklist recommendations.\n\nArgs:\n    destination: Destination name or id.\n    season: Target travel season ('spring', 'summer', 'fall', 'winter').\n\nReturns:\n    A dictionary containing weather expectation and recommended packing essentials.",
+                    "name": "get_weather_and_packing_tips",
+                    "parameters_json_schema": {
+                      "properties": {
+                        "destination": {
+                          "title": "Destination",
+                          "type": "string"
+                        },
+                        "season": {
+                          "default": "summer",
+                          "title": "Season",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "destination"
+                      ],
+                      "title": "get_weather_and_packing_tipsParams",
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    }
+                  }
+                ]
+              }
+            ],
+            "sub_agents": []
+          }
+        },
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "wanderlust_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_581485",
+                        "args": {
+                          "travel_style": "relaxation",
+                          "continent": "Asia",
+                          "budget_tier": "$"
+                        },
+                        "name": "search_destinations"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "wanderlust_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_581485",
+                        "name": "search_destinations",
+                        "response": {
+                          "result": [
+                            {
+                              "id": "bali",
+                              "name": "Bali, Indonesia",
+                              "continent": "Asia",
+                              "vibe": [
+                                "relaxation",
+                                "beaches",
+                                "wellness",
+                                "nature",
+                                "adventure"
+                              ],
+                              "budget_tier": "$",
+                              "avg_daily_cost_usd": 60,
+                              "best_season": "April to October (Dry Season)",
+                              "highlights_summary": [
+                                "Tegallalang Rice Terraces in Ubud",
+                                "Sunset at Uluwatu Temple with Kecak Fire Dance",
+                                "Surfing in Canggu and Seminyak"
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "wanderlust_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_795791",
+                        "args": {
+                          "destination_id": "bali"
+                        },
+                        "name": "get_destination_details"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "wanderlust_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_795791",
+                        "name": "get_destination_details",
+                        "response": {
+                          "id": "bali",
+                          "name": "Bali, Indonesia",
+                          "continent": "Asia",
+                          "country": "Indonesia",
+                          "vibe": [
+                            "relaxation",
+                            "beaches",
+                            "wellness",
+                            "nature",
+                            "adventure"
+                          ],
+                          "budget_tier": "$",
+                          "currency": "IDR (Indonesian Rupiah)",
+                          "best_season": "April to October (Dry Season)",
+                          "avg_daily_cost_usd": 60,
+                          "est_flight_usd": 950,
+                          "highlights": [
+                            "Tegallalang Rice Terraces in Ubud",
+                            "Sunset at Uluwatu Temple with Kecak Fire Dance",
+                            "Surfing in Canggu and Seminyak",
+                            "Sunrise hike at Mount Batur",
+                            "Nusa Penida island day trip"
+                          ],
+                          "hotels": [
+                            {
+                              "name": "Four Seasons Resort Bali at Sayan",
+                              "tier": "luxury",
+                              "price_per_night": 800
+                            },
+                            {
+                              "name": "Ubud Village Hotel",
+                              "tier": "midscale",
+                              "price_per_night": 95
+                            },
+                            {
+                              "name": "Puri Garden Hotel & Hostel",
+                              "tier": "budget",
+                              "price_per_night": 35
+                            }
+                          ],
+                          "top_eats": [
+                            "Nasi Campur",
+                            "Babi Guling",
+                            "Açaí bowls in Canggu"
+                          ]
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "wanderlust_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "The top recommendation for a budget-friendly relaxation and beach escape in Asia is **Bali, Indonesia**!\n\n---\n\n### 🌴 Why Bali?\nBali offers the ultimate balance of pristine beaches, lush tropical nature, holistic wellness retreats, and vibrant coastal culture—all while remaining remarkably easy on your wallet.\n\n* **Budget Tier:** **$** (Budget-friendly)\n* **Average Daily Living Cost:** ~$60 USD / day (covering meals, transport, and leisure)\n* **Best Time to Visit:** **April to October** (Dry season — sunny days and lower humidity)\n* **Vibe:** Relaxation, beaches, wellness, nature, and coastal sunsets\n\n---\n\n### 🌊 Top Relaxation & Beach Highlights\n* **Sunsets & Clifftop Views:** Watch iconic golden hours over the Indian Ocean from **Uluwatu Temple** (accompanied by the traditional Kecak Fire Dance).\n* **Beach Days & Surfing:** Lounge on the sands or catch mellow waves in **Canggu** and **Seminyak**, or take a boat trip out to the turquoise waters of **Nusa Penida**.\n* **Tranquility in Ubud:** When you want a break from the coast, unwind amidst emerald greenery at the **Tegallalang Rice Terraces** or book an open-air jungle spa.\n\n---\n\n### 🏨 Where to Stay (Options for Every Budget)\n* **Budget ($35/night):** *Puri Garden Hotel & Hostel* – Relaxed social atmosphere with a pool, yoga classes, and lush gardens.\n* **Midscale ($95/night):** *Ubud Village Hotel* – Boutique comfort with serene jungle pools and traditional Balinese architecture.\n* **Luxury ($800/night):** *Four Seasons Resort Bali at Sayan* – World-class riverfront sanctuary immersed in nature.\n\n---\n\n### 🍲 Must-Try Local Eats\n* **Nasi Campur:** Fragrant rice served with a colorful assortment of spiced meats, vegetables, and sambal.\n* **Babi Guling:** Traditional Balinese spit-roasted suckling pig.\n* **Fresh Açaí Bowls & Smoothies:** Plentiful in Canggu and Seminyak beachside cafes.\n\n---\n\nWould you like me to put together a **custom multi-day itinerary**, calculate a **full estimated budget** for your trip duration, or provide **packing and weather tips**?"
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "Calculate an estimated 7-day trip budget for 2 people traveling to Costa Rica with midscale lodging."
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "Here is the estimated **7-day trip budget for 2 travelers** heading to **Costa Rica (Arenal & Manuel Antonio)** with midscale accommodations:\n\n---\n\n### **Trip Budget Breakdown**\n\n| Category | Cost (USD) | Notes |\n| :--- | :--- | :--- |\n| **Lodging (7 nights)** | **$1,470** | Midscale eco-lodges / boutique rainforest hotels (~$210/night) |\n| **Daily Expenses (Food & Activities)** | **$1,540** | Meals, park entries, guided tours & local transit (~$110/person/day) |\n| **Round-Trip Flights** | **$1,100** | Estimated international airfare (~$550/person) |\n| **Total Estimated Cost** | **$4,110** | **~$2,055 per person** |\n\n---\n\n### **Key Notes & Travel Tips:**\n- **Currency:** Costa Rican Colón (CRC) and US Dollars (USD) are widely accepted across tourist destinations. Credit cards are commonly accepted in hotels and major restaurants.\n- **Activities Covered in Daily Spend:** National park fees (Manuel Antonio, Arenal Volcano), guided rainforest walks, hot springs access, and adventure activities like zip-lining.\n- **Exclusions to Consider:** Optional rental car (recommended if exploring at your own pace; approx. $50–$80/day including mandatory insurance) and travel insurance.\n\nWould you like recommendations on top places to visit, a sample day-by-day itinerary, or seasonal packing tips?"
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "eval_case_id": "budget_calculation_costa_rica",
+      "agent_data": {
+        "agents": {
+          "wanderlust_agent": {
+            "agent_id": "wanderlust_agent",
+            "agent_type": "LlmAgent",
+            "description": "",
+            "instruction": "You are Wanderlust Concierge, an expert travel designer and trip planning AI assistant.\nYour mission is to help travelers discover extraordinary destinations, design curated day-by-day itineraries, estimate transparent trip budgets, and prepare for seamless journeys.\n\nGuidelines:\n1. When asked for recommendations, always use `search_destinations` or `get_destination_details` to retrieve accurate catalog details.\n2. When asked about costs, use `calculate_trip_budget` to compute accurate lodging, daily living, and airfare costs.\n3. When asked for packing or climate advice, use `get_weather_and_packing_tips`.\n4. Be engaging, inspiring, and concise. Provide actionable advice tailored to the user's travel style (adventure, cultural, luxury, budget, relaxation).\n5. If the user expresses specific travel preferences (e.g., budget limits, preferred continents, favorite activities), remember them and tailor subsequent recommendations accordingly.\n",
+            "tools": [
+              {
+                "function_declarations": [
+                  {
+                    "description": "Search and filter the curated catalog of travel destinations.\n\nArgs:\n    query: Optional search keyword (e.g. 'temple', 'hiking', 'beach', 'tokyo', 'europe').\n    continent: Optional continent filter ('Asia', 'Europe', 'Americas').\n    budget_tier: Optional budget tier filter ('$' for budget, '$$' for moderate, '$$$' for premium).\n    travel_style: Optional vibe or style ('adventure', 'relaxation', 'culinary', 'cultural', 'nature').\n\nReturns:\n    A list of matching destination summaries.",
+                    "name": "search_destinations",
+                    "parameters_json_schema": {
+                      "properties": {
+                        "query": {
+                          "default": "",
+                          "title": "Query",
+                          "type": "string"
+                        },
+                        "continent": {
+                          "default": "",
+                          "title": "Continent",
+                          "type": "string"
+                        },
+                        "budget_tier": {
+                          "default": "",
+                          "title": "Budget Tier",
+                          "type": "string"
+                        },
+                        "travel_style": {
+                          "default": "",
+                          "title": "Travel Style",
+                          "type": "string"
+                        }
+                      },
+                      "title": "search_destinationsParams",
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "items": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Retrieve comprehensive details, attractions, hotels, and food for a specific destination.\n\nArgs:\n    destination_id: Identifier of the destination (e.g. 'tokyo', 'paris', 'bali', 'costa_rica', 'rome', 'banff').\n\nReturns:\n    Full destination details dictionary or error note.",
+                    "name": "get_destination_details",
+                    "parameters_json_schema": {
+                      "properties": {
+                        "destination_id": {
+                          "title": "Destination Id",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "destination_id"
+                      ],
+                      "title": "get_destination_detailsParams",
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Calculate an estimated trip budget breakdown for a destination.\n\nArgs:\n    destination_id: Target destination id (e.g. 'tokyo', 'paris', 'bali', 'costa_rica', 'rome', 'banff').\n    days: Duration of the trip in days (default: 5).\n    num_travelers: Number of people traveling (default: 1).\n    accommodation_tier: Tier of lodging ('budget', 'midscale', 'luxury').\n    include_flights: Whether to calculate estimated round-trip airfare.\n\nReturns:\n    A detailed cost breakdown including lodging, daily expenses, flights, and total budget.",
+                    "name": "calculate_trip_budget",
+                    "parameters_json_schema": {
+                      "properties": {
+                        "destination_id": {
+                          "title": "Destination Id",
+                          "type": "string"
+                        },
+                        "days": {
+                          "default": 5,
+                          "title": "Days",
+                          "type": "integer"
+                        },
+                        "num_travelers": {
+                          "default": 1,
+                          "title": "Num Travelers",
+                          "type": "integer"
+                        },
+                        "accommodation_tier": {
+                          "default": "midscale",
+                          "title": "Accommodation Tier",
+                          "type": "string"
+                        },
+                        "include_flights": {
+                          "default": true,
+                          "title": "Include Flights",
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "destination_id"
+                      ],
+                      "title": "calculate_trip_budgetParams",
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Get climate information, seasonal weather, and packing checklist recommendations.\n\nArgs:\n    destination: Destination name or id.\n    season: Target travel season ('spring', 'summer', 'fall', 'winter').\n\nReturns:\n    A dictionary containing weather expectation and recommended packing essentials.",
+                    "name": "get_weather_and_packing_tips",
+                    "parameters_json_schema": {
+                      "properties": {
+                        "destination": {
+                          "title": "Destination",
+                          "type": "string"
+                        },
+                        "season": {
+                          "default": "summer",
+                          "title": "Season",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "destination"
+                      ],
+                      "title": "get_weather_and_packing_tipsParams",
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    }
+                  }
+                ]
+              }
+            ],
+            "sub_agents": []
+          }
+        },
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "wanderlust_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_957833",
+                        "args": {
+                          "include_flights": true,
+                          "accommodation_tier": "midscale",
+                          "num_travelers": 2,
+                          "days": 7,
+                          "destination_id": "costa_rica"
+                        },
+                        "name": "calculate_trip_budget"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "wanderlust_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_957833",
+                        "name": "calculate_trip_budget",
+                        "response": {
+                          "destination": "Arenal & Manuel Antonio, Costa Rica",
+                          "trip_length_days": 7,
+                          "travelers": 2,
+                          "accommodation_tier": "midscale",
+                          "breakdown_usd": {
+                            "estimated_flights": 1100,
+                            "lodging_total": 1470,
+                            "daily_spend_food_activities (7 days)": 1540,
+                            "grand_total_usd": 4110,
+                            "estimated_per_person_usd": 2055.0
+                          },
+                          "currency_info": "CRC (Colón) / USD"
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "wanderlust_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Here is the estimated **7-day trip budget for 2 travelers** heading to **Costa Rica (Arenal & Manuel Antonio)** with midscale accommodations:\n\n---\n\n### **Trip Budget Breakdown**\n\n| Category | Cost (USD) | Notes |\n| :--- | :--- | :--- |\n| **Lodging (7 nights)** | **$1,470** | Midscale eco-lodges / boutique rainforest hotels (~$210/night) |\n| **Daily Expenses (Food & Activities)** | **$1,540** | Meals, park entries, guided tours & local transit (~$110/person/day) |\n| **Round-Trip Flights** | **$1,100** | Estimated international airfare (~$550/person) |\n| **Total Estimated Cost** | **$4,110** | **~$2,055 per person** |\n\n---\n\n### **Key Notes & Travel Tips:**\n- **Currency:** Costa Rican Colón (CRC) and US Dollars (USD) are widely accepted across tourist destinations. Credit cards are commonly accepted in hotels and major restaurants.\n- **Activities Covered in Daily Spend:** National park fees (Manuel Antonio, Arenal Volcano), guided rainforest walks, hot springs access, and adventure activities like zip-lining.\n- **Exclusions to Consider:** Optional rental car (recommended if exploring at your own pace; approx. $50–$80/day including mandatory insurance) and travel insurance.\n\nWould you like recommendations on top places to visit, a sample day-by-day itinerary, or seasonal packing tips?"
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "What are the must-see highlights and top foods to try in Tokyo?"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "Tokyo is an incredible blend of ultramodern energy and timeless tradition! Here are the **must-see highlights** and **top iconic foods** to experience:\n\n---\n\n### 🌟 Must-See Highlights\n\n1. **Shibuya Crossing & Harajuku**\n   * Experience the pulse of the world’s busiest pedestrian crossing, then wander into Harajuku’s Takeshita Street for quirky street fashion, cosplay culture, and vibrant boutiques.\n2. **Sensō-ji Temple (Asakusa)**\n   * Tokyo’s oldest and most historic Buddhist temple. Walk through the imposing Kaminarimon (Thunder Gate) and browse traditional snacks and souvenirs along Nakamise-dori.\n3. **teamLab Planets**\n   * An immersive, boundary-blurring digital art museum where you walk through water, crystalline light gardens, and floating flower rooms.\n4. **Shinjuku Gyoen National Garden**\n   * A serene escape blending traditional Japanese, English landscape, and French formal garden styles—especially breathtaking during cherry blossom season or autumn foliage.\n5. **Tsukiji Outer Market**\n   * A lively foodie haven packed with narrow alleys offering fresh oysters, tamagoyaki (rolled omelets), wagyu skewers, and fresh sashimi bowls.\n\n---\n\n### 🍜 Top Foods to Try\n\n1. **Authentic Ramen (e.g., Ichiran or local specialty shops)**\n   * Rich tonkotsu (pork bone) broth, chewy springy noodles, and melt-in-your-mouth chashu pork, customizable down to spice level and noodle firmness.\n2. **Fresh Market Sushi (e.g., Sushi Dai)**\n   * World-class, melt-on-the-tongue nigiri crafted with the freshest catch of the morning (such as otoro/fatty tuna and sea urchin).\n3. **Monjayaki in Tsukishima**\n   * Tokyo’s beloved pan-fried savory batter dish filled with shredded cabbage, seafood, cheese, and mochi, grilled right in front of you on a hot teppan griddle.\n\n---\n\n💡 *Tip:* The best times to visit are during spring (**March to May** for cherry blossoms) and fall (**September to November** for crisp air and vibrant leaves). \n\nWould you like a day-by-day itinerary, hotel recommendations, or a budget breakdown for your trip?"
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "eval_case_id": "destination_details_tokyo",
+      "agent_data": {
+        "agents": {
+          "wanderlust_agent": {
+            "agent_id": "wanderlust_agent",
+            "agent_type": "LlmAgent",
+            "description": "",
+            "instruction": "You are Wanderlust Concierge, an expert travel designer and trip planning AI assistant.\nYour mission is to help travelers discover extraordinary destinations, design curated day-by-day itineraries, estimate transparent trip budgets, and prepare for seamless journeys.\n\nGuidelines:\n1. When asked for recommendations, always use `search_destinations` or `get_destination_details` to retrieve accurate catalog details.\n2. When asked about costs, use `calculate_trip_budget` to compute accurate lodging, daily living, and airfare costs.\n3. When asked for packing or climate advice, use `get_weather_and_packing_tips`.\n4. Be engaging, inspiring, and concise. Provide actionable advice tailored to the user's travel style (adventure, cultural, luxury, budget, relaxation).\n5. If the user expresses specific travel preferences (e.g., budget limits, preferred continents, favorite activities), remember them and tailor subsequent recommendations accordingly.\n",
+            "tools": [
+              {
+                "function_declarations": [
+                  {
+                    "description": "Search and filter the curated catalog of travel destinations.\n\nArgs:\n    query: Optional search keyword (e.g. 'temple', 'hiking', 'beach', 'tokyo', 'europe').\n    continent: Optional continent filter ('Asia', 'Europe', 'Americas').\n    budget_tier: Optional budget tier filter ('$' for budget, '$$' for moderate, '$$$' for premium).\n    travel_style: Optional vibe or style ('adventure', 'relaxation', 'culinary', 'cultural', 'nature').\n\nReturns:\n    A list of matching destination summaries.",
+                    "name": "search_destinations",
+                    "parameters_json_schema": {
+                      "properties": {
+                        "query": {
+                          "default": "",
+                          "title": "Query",
+                          "type": "string"
+                        },
+                        "continent": {
+                          "default": "",
+                          "title": "Continent",
+                          "type": "string"
+                        },
+                        "budget_tier": {
+                          "default": "",
+                          "title": "Budget Tier",
+                          "type": "string"
+                        },
+                        "travel_style": {
+                          "default": "",
+                          "title": "Travel Style",
+                          "type": "string"
+                        }
+                      },
+                      "title": "search_destinationsParams",
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "items": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Retrieve comprehensive details, attractions, hotels, and food for a specific destination.\n\nArgs:\n    destination_id: Identifier of the destination (e.g. 'tokyo', 'paris', 'bali', 'costa_rica', 'rome', 'banff').\n\nReturns:\n    Full destination details dictionary or error note.",
+                    "name": "get_destination_details",
+                    "parameters_json_schema": {
+                      "properties": {
+                        "destination_id": {
+                          "title": "Destination Id",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "destination_id"
+                      ],
+                      "title": "get_destination_detailsParams",
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Calculate an estimated trip budget breakdown for a destination.\n\nArgs:\n    destination_id: Target destination id (e.g. 'tokyo', 'paris', 'bali', 'costa_rica', 'rome', 'banff').\n    days: Duration of the trip in days (default: 5).\n    num_travelers: Number of people traveling (default: 1).\n    accommodation_tier: Tier of lodging ('budget', 'midscale', 'luxury').\n    include_flights: Whether to calculate estimated round-trip airfare.\n\nReturns:\n    A detailed cost breakdown including lodging, daily expenses, flights, and total budget.",
+                    "name": "calculate_trip_budget",
+                    "parameters_json_schema": {
+                      "properties": {
+                        "destination_id": {
+                          "title": "Destination Id",
+                          "type": "string"
+                        },
+                        "days": {
+                          "default": 5,
+                          "title": "Days",
+                          "type": "integer"
+                        },
+                        "num_travelers": {
+                          "default": 1,
+                          "title": "Num Travelers",
+                          "type": "integer"
+                        },
+                        "accommodation_tier": {
+                          "default": "midscale",
+                          "title": "Accommodation Tier",
+                          "type": "string"
+                        },
+                        "include_flights": {
+                          "default": true,
+                          "title": "Include Flights",
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "destination_id"
+                      ],
+                      "title": "calculate_trip_budgetParams",
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Get climate information, seasonal weather, and packing checklist recommendations.\n\nArgs:\n    destination: Destination name or id.\n    season: Target travel season ('spring', 'summer', 'fall', 'winter').\n\nReturns:\n    A dictionary containing weather expectation and recommended packing essentials.",
+                    "name": "get_weather_and_packing_tips",
+                    "parameters_json_schema": {
+                      "properties": {
+                        "destination": {
+                          "title": "Destination",
+                          "type": "string"
+                        },
+                        "season": {
+                          "default": "summer",
+                          "title": "Season",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "destination"
+                      ],
+                      "title": "get_weather_and_packing_tipsParams",
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    }
+                  }
+                ]
+              }
+            ],
+            "sub_agents": []
+          }
+        },
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "wanderlust_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_17159",
+                        "args": {
+                          "destination_id": "tokyo"
+                        },
+                        "name": "get_destination_details"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "wanderlust_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_17159",
+                        "name": "get_destination_details",
+                        "response": {
+                          "id": "tokyo",
+                          "name": "Tokyo, Japan",
+                          "continent": "Asia",
+                          "country": "Japan",
+                          "vibe": [
+                            "futuristic",
+                            "culinary",
+                            "cultural",
+                            "shopping"
+                          ],
+                          "budget_tier": "$$$",
+                          "currency": "JPY (Yen)",
+                          "best_season": "March to May (Cherry Blossom) & September to November",
+                          "avg_daily_cost_usd": 150,
+                          "est_flight_usd": 900,
+                          "highlights": [
+                            "Shibuya Crossing & Harajuku street style",
+                            "Tsukiji Outer Market sashimi breakfast",
+                            "Senso-ji temple in historic Asakusa",
+                            "Shinjuku Gyoen National Garden",
+                            "TeamLab Planets digital art museum"
+                          ],
+                          "hotels": [
+                            {
+                              "name": "Park Hyatt Tokyo",
+                              "tier": "luxury",
+                              "price_per_night": 650
+                            },
+                            {
+                              "name": "Hotel Gracery Shinjuku",
+                              "tier": "midscale",
+                              "price_per_night": 180
+                            },
+                            {
+                              "name": "Khaosan Tokyo Origami",
+                              "tier": "budget",
+                              "price_per_night": 55
+                            }
+                          ],
+                          "top_eats": [
+                            "Ramen at Ichiran",
+                            "Sushi Dai",
+                            "Monjayaki in Tsukishima"
+                          ]
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "wanderlust_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Tokyo is an incredible blend of ultramodern energy and timeless tradition! Here are the **must-see highlights** and **top iconic foods** to experience:\n\n---\n\n### 🌟 Must-See Highlights\n\n1. **Shibuya Crossing & Harajuku**\n   * Experience the pulse of the world’s busiest pedestrian crossing, then wander into Harajuku’s Takeshita Street for quirky street fashion, cosplay culture, and vibrant boutiques.\n2. **Sensō-ji Temple (Asakusa)**\n   * Tokyo’s oldest and most historic Buddhist temple. Walk through the imposing Kaminarimon (Thunder Gate) and browse traditional snacks and souvenirs along Nakamise-dori.\n3. **teamLab Planets**\n   * An immersive, boundary-blurring digital art museum where you walk through water, crystalline light gardens, and floating flower rooms.\n4. **Shinjuku Gyoen National Garden**\n   * A serene escape blending traditional Japanese, English landscape, and French formal garden styles—especially breathtaking during cherry blossom season or autumn foliage.\n5. **Tsukiji Outer Market**\n   * A lively foodie haven packed with narrow alleys offering fresh oysters, tamagoyaki (rolled omelets), wagyu skewers, and fresh sashimi bowls.\n\n---\n\n### 🍜 Top Foods to Try\n\n1. **Authentic Ramen (e.g., Ichiran or local specialty shops)**\n   * Rich tonkotsu (pork bone) broth, chewy springy noodles, and melt-in-your-mouth chashu pork, customizable down to spice level and noodle firmness.\n2. **Fresh Market Sushi (e.g., Sushi Dai)**\n   * World-class, melt-on-the-tongue nigiri crafted with the freshest catch of the morning (such as otoro/fatty tuna and sea urchin).\n3. **Monjayaki in Tsukishima**\n   * Tokyo’s beloved pan-fried savory batter dish filled with shredded cabbage, seafood, cheese, and mochi, grilled right in front of you on a hot teppan griddle.\n\n---\n\n💡 *Tip:* The best times to visit are during spring (**March to May** for cherry blossoms) and fall (**September to November** for crisp air and vibrant leaves). \n\nWould you like a day-by-day itinerary, hotel recommendations, or a budget breakdown for your trip?"
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "What kind of weather should I expect and what should I pack for a trip to Banff in the summer?"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "Here is what you can expect for summer weather in **Banff National Park** and how to pack for it:\n\n---\n\n### ☀️ Weather Expectation\n* **Climate:** Alpine mountain climate with crisp, fresh air and long daylight hours.\n* **Temperatures:** Typically range from **50°F to 70°F (10°C to 22°C)** during the day.\n* **Variability:** Mountain weather shifts rapidly! Mornings and evenings can get quite cool (dropping into the 40s°F / single digits °C), and higher elevation trails or passes can be significantly chillier and windier. Afternoon rain showers or thunderstorms are also common.\n\n---\n\n### 🎒 Essential Packing Checklist\n\n#### **Clothing & Layers**\n* **Layering System:** Breathable moisture-wicking t-shirts, long-sleeve shirts, and lightweight thermal base layers.\n* **Warm Insulation:** A fleece sweater or lightweight packable down jacket for chilly mornings, evenings, and high viewpoints.\n* **Outer Shell:** A waterproof, wind-resistant rain jacket.\n* **Pants:** Comfortable hiking pants (convertible or quick-dry) and casual wear for the town of Banff.\n\n#### **Footwear**\n* **Sturdy Trail Hiking Boots:** With good ankle support and grip for rocky, uneven terrain around Lake Louise, Moraine Lake, and Johnston Canyon.\n* **Comfortable Walking Shoes/Sneakers:** For exploring the Banff townsite, restaurants, and paved scenic pathways.\n* **Wool/Moisture-Wicking Socks:** To prevent blisters and regulate temperature.\n\n#### **Outdoor & Sun Protection**\n* **UV Sunglasses & Sun Hat:** High-altitude mountain sun is strong, especially with reflections off glacial lakes.\n* **Sunscreen & Lip Balm with SPF.**\n* **Insect Repellent:** Mosquitoes can be active around lakes and forested trails in mid-summer.\n\n#### **Gear & Practical Essentials**\n* **Reusable Water Bottle or Hydration Bladder.**\n* **Small Daypack:** To carry layers, water, snacks, and a camera.\n* **Portable Power Bank:** Mountain cold can drain phone batteries quickly.\n* **Bear Spray:** Essential if you plan on hiking backcountry or less crowded trails (note: purchase or rent locally in Banff, as it cannot be flown on planes).\n* **Travel Documents:** Passport, travel insurance, and your Canada National Parks Pass (Discovery Pass).\n\nAre you planning any specific hikes or activities in Banff, like visiting the hot springs, canoeing on Lake Louise, or driving the Icefields Parkway? Let me know and I can share customized tips or a tailored itinerary!"
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "eval_case_id": "packing_tips_banff_summer",
+      "agent_data": {
+        "agents": {
+          "wanderlust_agent": {
+            "agent_id": "wanderlust_agent",
+            "agent_type": "LlmAgent",
+            "description": "",
+            "instruction": "You are Wanderlust Concierge, an expert travel designer and trip planning AI assistant.\nYour mission is to help travelers discover extraordinary destinations, design curated day-by-day itineraries, estimate transparent trip budgets, and prepare for seamless journeys.\n\nGuidelines:\n1. When asked for recommendations, always use `search_destinations` or `get_destination_details` to retrieve accurate catalog details.\n2. When asked about costs, use `calculate_trip_budget` to compute accurate lodging, daily living, and airfare costs.\n3. When asked for packing or climate advice, use `get_weather_and_packing_tips`.\n4. Be engaging, inspiring, and concise. Provide actionable advice tailored to the user's travel style (adventure, cultural, luxury, budget, relaxation).\n5. If the user expresses specific travel preferences (e.g., budget limits, preferred continents, favorite activities), remember them and tailor subsequent recommendations accordingly.\n",
+            "tools": [
+              {
+                "function_declarations": [
+                  {
+                    "description": "Search and filter the curated catalog of travel destinations.\n\nArgs:\n    query: Optional search keyword (e.g. 'temple', 'hiking', 'beach', 'tokyo', 'europe').\n    continent: Optional continent filter ('Asia', 'Europe', 'Americas').\n    budget_tier: Optional budget tier filter ('$' for budget, '$$' for moderate, '$$$' for premium).\n    travel_style: Optional vibe or style ('adventure', 'relaxation', 'culinary', 'cultural', 'nature').\n\nReturns:\n    A list of matching destination summaries.",
+                    "name": "search_destinations",
+                    "parameters_json_schema": {
+                      "properties": {
+                        "query": {
+                          "default": "",
+                          "title": "Query",
+                          "type": "string"
+                        },
+                        "continent": {
+                          "default": "",
+                          "title": "Continent",
+                          "type": "string"
+                        },
+                        "budget_tier": {
+                          "default": "",
+                          "title": "Budget Tier",
+                          "type": "string"
+                        },
+                        "travel_style": {
+                          "default": "",
+                          "title": "Travel Style",
+                          "type": "string"
+                        }
+                      },
+                      "title": "search_destinationsParams",
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "items": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Retrieve comprehensive details, attractions, hotels, and food for a specific destination.\n\nArgs:\n    destination_id: Identifier of the destination (e.g. 'tokyo', 'paris', 'bali', 'costa_rica', 'rome', 'banff').\n\nReturns:\n    Full destination details dictionary or error note.",
+                    "name": "get_destination_details",
+                    "parameters_json_schema": {
+                      "properties": {
+                        "destination_id": {
+                          "title": "Destination Id",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "destination_id"
+                      ],
+                      "title": "get_destination_detailsParams",
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Calculate an estimated trip budget breakdown for a destination.\n\nArgs:\n    destination_id: Target destination id (e.g. 'tokyo', 'paris', 'bali', 'costa_rica', 'rome', 'banff').\n    days: Duration of the trip in days (default: 5).\n    num_travelers: Number of people traveling (default: 1).\n    accommodation_tier: Tier of lodging ('budget', 'midscale', 'luxury').\n    include_flights: Whether to calculate estimated round-trip airfare.\n\nReturns:\n    A detailed cost breakdown including lodging, daily expenses, flights, and total budget.",
+                    "name": "calculate_trip_budget",
+                    "parameters_json_schema": {
+                      "properties": {
+                        "destination_id": {
+                          "title": "Destination Id",
+                          "type": "string"
+                        },
+                        "days": {
+                          "default": 5,
+                          "title": "Days",
+                          "type": "integer"
+                        },
+                        "num_travelers": {
+                          "default": 1,
+                          "title": "Num Travelers",
+                          "type": "integer"
+                        },
+                        "accommodation_tier": {
+                          "default": "midscale",
+                          "title": "Accommodation Tier",
+                          "type": "string"
+                        },
+                        "include_flights": {
+                          "default": true,
+                          "title": "Include Flights",
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "destination_id"
+                      ],
+                      "title": "calculate_trip_budgetParams",
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Get climate information, seasonal weather, and packing checklist recommendations.\n\nArgs:\n    destination: Destination name or id.\n    season: Target travel season ('spring', 'summer', 'fall', 'winter').\n\nReturns:\n    A dictionary containing weather expectation and recommended packing essentials.",
+                    "name": "get_weather_and_packing_tips",
+                    "parameters_json_schema": {
+                      "properties": {
+                        "destination": {
+                          "title": "Destination",
+                          "type": "string"
+                        },
+                        "season": {
+                          "default": "summer",
+                          "title": "Season",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "destination"
+                      ],
+                      "title": "get_weather_and_packing_tipsParams",
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    }
+                  }
+                ]
+              }
+            ],
+            "sub_agents": []
+          }
+        },
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "wanderlust_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_983229",
+                        "args": {
+                          "destination": "banff",
+                          "season": "summer"
+                        },
+                        "name": "get_weather_and_packing_tips"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "wanderlust_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_983229",
+                        "name": "get_weather_and_packing_tips",
+                        "response": {
+                          "destination": "Banff National Park, Canada",
+                          "season": "summer",
+                          "weather_summary": "Alpine climate: cool evenings, crisp mountain breeze (50-70°F in summer, sub-freezing in winter).",
+                          "packing_checklist": [
+                            "Universal power adapter & portable power bank",
+                            "Comfortable walking / hiking shoes",
+                            "Passport & travel insurance docs",
+                            "Reusable water bottle",
+                            "Warm layers / fleece jacket",
+                            "Thermal base layers",
+                            "Sturdy trail hiking boots",
+                            "UV sunglasses"
+                          ]
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "wanderlust_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Here is what you can expect for summer weather in **Banff National Park** and how to pack for it:\n\n---\n\n### ☀️ Weather Expectation\n* **Climate:** Alpine mountain climate with crisp, fresh air and long daylight hours.\n* **Temperatures:** Typically range from **50°F to 70°F (10°C to 22°C)** during the day.\n* **Variability:** Mountain weather shifts rapidly! Mornings and evenings can get quite cool (dropping into the 40s°F / single digits °C), and higher elevation trails or passes can be significantly chillier and windier. Afternoon rain showers or thunderstorms are also common.\n\n---\n\n### 🎒 Essential Packing Checklist\n\n#### **Clothing & Layers**\n* **Layering System:** Breathable moisture-wicking t-shirts, long-sleeve shirts, and lightweight thermal base layers.\n* **Warm Insulation:** A fleece sweater or lightweight packable down jacket for chilly mornings, evenings, and high viewpoints.\n* **Outer Shell:** A waterproof, wind-resistant rain jacket.\n* **Pants:** Comfortable hiking pants (convertible or quick-dry) and casual wear for the town of Banff.\n\n#### **Footwear**\n* **Sturdy Trail Hiking Boots:** With good ankle support and grip for rocky, uneven terrain around Lake Louise, Moraine Lake, and Johnston Canyon.\n* **Comfortable Walking Shoes/Sneakers:** For exploring the Banff townsite, restaurants, and paved scenic pathways.\n* **Wool/Moisture-Wicking Socks:** To prevent blisters and regulate temperature.\n\n#### **Outdoor & Sun Protection**\n* **UV Sunglasses & Sun Hat:** High-altitude mountain sun is strong, especially with reflections off glacial lakes.\n* **Sunscreen & Lip Balm with SPF.**\n* **Insect Repellent:** Mosquitoes can be active around lakes and forested trails in mid-summer.\n\n#### **Gear & Practical Essentials**\n* **Reusable Water Bottle or Hydration Bladder.**\n* **Small Daypack:** To carry layers, water, snacks, and a camera.\n* **Portable Power Bank:** Mountain cold can drain phone batteries quickly.\n* **Bear Spray:** Essential if you plan on hiking backcountry or less crowded trails (note: purchase or rent locally in Banff, as it cannot be flown on planes).\n* **Travel Documents:** Passport, travel insurance, and your Canada National Parks Pass (Discovery Pass).\n\nAre you planning any specific hikes or activities in Banff, like visiting the hot springs, canoeing on Lake Louise, or driving the Icefields Parkway? Let me know and I can share customized tips or a tailored itinerary!"
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

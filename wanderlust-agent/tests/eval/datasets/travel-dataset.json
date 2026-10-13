@@ -1,0 +1,32 @@
+{
+  "eval_cases": [
+    {
+      "eval_case_id": "destination_search_budget",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "Can you recommend a budget-friendly relaxation and beach destination in Asia?"}]
+      }
+    },
+    {
+      "eval_case_id": "budget_calculation_costa_rica",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "Calculate an estimated 7-day trip budget for 2 people traveling to Costa Rica with midscale lodging."}]
+      }
+    },
+    {
+      "eval_case_id": "destination_details_tokyo",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "What are the must-see highlights and top foods to try in Tokyo?"}]
+      }
+    },
+    {
+      "eval_case_id": "packing_tips_banff_summer",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "What kind of weather should I expect and what should I pack for a trip to Banff in the summer?"}]
+      }
+    }
+  ]
+}
